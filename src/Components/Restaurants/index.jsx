@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Button from 'Components/Button';
 
@@ -52,7 +51,6 @@ function Restaurants() {
                             : null
                     }
                 </ul>
-                {/* <Button title="Найти" /> */}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-10">
                 {filteredRest.map((item) => (
@@ -61,8 +59,8 @@ function Restaurants() {
                         <h3 className="text-2xl font-semibold">{item.name}</h3>
                         <p className="mt-3 text-slate-700 text-sm">Основное направление кухни: {item.cuisine}</p>
                         <p className="mt-5 text-slate-950 px-2">{item.description}</p>
-                        <Link to={`/RestaurantPage/${item.slug}`} className="mt-10">
-                            <Button title="Посмотреть меню" />
+                        <Link to={`/restPage/${item.slug}`} className="mt-10">
+                            <Button title="Подробнее" />
                         </Link>
                     </div>
                 ))
