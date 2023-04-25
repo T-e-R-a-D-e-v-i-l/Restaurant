@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
 
-
 function Header() {
 
     return (
@@ -11,7 +10,7 @@ function Header() {
                     <h1 className="ml-3 text-4xl font-bold">My <br />food</h1>
                     <h3 className="ml-10 text-2xl text-slate-800 italic font-semibold">Все лучшие заведения нашего города в одном месте!</h3>
                 </Link>
-                <Link to={`/basket`} className="w-24 h-24 m-2">
+                <Link to={`/cart`} className="w-24 h-24 m-2">
                     <img src="./images/basket.png" alt="" />
                 </Link>
             </div>

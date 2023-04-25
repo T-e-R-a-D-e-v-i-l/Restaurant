@@ -1,0 +1,1 @@
+// export const cakcTotalPrice = menu => menu.reduce((acc, ))

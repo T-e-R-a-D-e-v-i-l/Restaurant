@@ -1,21 +1,48 @@
 import { useEffect, useState } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import Button from 'Components/Button';
 import { format } from "date-fns"
+import uuid4 from 'uuid4'
 
 
-function RestaurantPage() {
+function RestaurantPage({ menu, restCard, setMenu, setRestCard }) {
 
     const { slug } = useParams()
 
+    const [cartItems, setCartItems] = useState([])
+
+
     // console.log(slug)
-    const [restCard, setRestCard] = useState([])
+
+    const addProduct = (orderMenu) => {
+        setCartItems([cartItems])
+    }
+
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}`)
             .then(data => data.json())
             .then(response => setRestCard(response))
     }, [slug])
+
+    useEffect(() => {
+        fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}/items`)
+            .then(data => data.json())
+            .then(response => setMenu(response))
+    }, [slug])
+
+    if (!restCard) return <div>Loading...</div>
+
+    const handleClick = event => {
+        event.preventDefault()
+        const orderMenu = {
+            id: uuid4(),
+            price: menu.price
+        }
+        addProduct(cartItems)
+
+        console.log(orderMenu)
+    }
 
     return (
         <div className='max-w-screen-md m-auto '>
@@ -34,9 +61,24 @@ function RestaurantPage() {
                     <p>Телефон: {restCard.phone}</p>
                     <p>Электронная почта: {restCard.email}</p>
                 </div>
-                <Link to={`/restPage/${restCard.slug}`}>
-                    <Button title="Посмотреть меню" />
-                </Link>
+                <div className="grid gap-4">
+                    <h2 className="text-4xl text-center font-semibold">Наше меню</h2>
+                    {menu.map((menu) => (
+                        <div key={menu.id} className="flex items-center gap-2 shadow-xl p-4 rounded-2xl">
+                            <img className="w-1/4 h-fit rounded-3xl object-center object-cover" src={menu.image} alt=""></img>
+                            <div className="flex flex-col">
+                                <h3 className="text-xl font-semibold">{menu.name}</h3>
+                                <p className="">{menu.description}</p>
+                            </div>
+                            <div className="flex flex-col items-center gap-4">
+                                <p className="text-xl font-bold italic">{menu.price} ₽ </p>
+                                <Button handleClick={handleClick} title="Заказать" />
+                            </div>
+                        </div>
+                    ))
+                    }
+                </div>
+
             </div>
         </div>
     )
