@@ -1,44 +1,82 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import Button from 'Components/Button';
+import Button from 'Components/Button'
 import { format } from "date-fns"
 import uuid4 from 'uuid4'
+import swal from 'sweetalert'
 
 
-function RestaurantPage({ menu, restCard, setMenu, setRestCard }) {
+function RestaurantPage() {
 
     const { slug } = useParams()
 
-    const [cartItems, setCartItems] = useState([])
-
-
-    // console.log(slug)
-
-    const addProduct = (orderMenu) => {
-        setCartItems([cartItems])
-    }
-
+    const [restCard, setRestCard] = useState(null) // карточка ресторана  restarant
+    const [menu, setMenu] = useState([]) // все блюда меню dishes
+    const [cartItems, setCartItems] = useState([]) // товары в корзине cart
+    // const [btnOn, setBtnOn] = useState(true)
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}`)
             .then(data => data.json())
             .then(response => setRestCard(response))
-    }, [slug])
+    }, [slug, setRestCard])
 
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants/${slug}/items`)
             .then(data => data.json())
             .then(response => setMenu(response))
-    }, [slug])
+    }, [slug, setMenu])
 
-    if (!restCard) return <div>Loading...</div>
+    useEffect(() => {
+        const cartJson = JSON.stringify(cartItems)
+        localStorage.setItem("orderItems", cartJson)
+    }, [cartItems])
 
-    const handleClick = event => {
+    if (!restCard) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
+
+    // console.log(slug)
+    const addProduct = (orderMenu) => {
+        if (cartItems.length > 0) {
+            if (cartItems[0].place !== orderMenu.place) {
+                swal({
+                    title: "Подтвердите действие!",
+                    text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal("Корзина очищена!", {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("");
+                        }
+                    });
+            } else {
+                setCartItems([orderMenu]);
+            }
+        } else {
+            setCartItems([cartItems])
+        }
+    }
+
+    console.log(cartItems)
+    // console.log(restCard)
+
+
+    const handleClick = (event, menuItem) => {
         event.preventDefault()
         const orderMenu = {
             id: uuid4(),
-            price: menu.price
+            place: restCard.name,
+            image: menuItem.image,
+            name: menuItem.name,
+            price: menuItem.price
         }
+
+        setCartItems([...cartItems, orderMenu])
         addProduct(cartItems)
 
         console.log(orderMenu)
@@ -63,16 +101,17 @@ function RestaurantPage({ menu, restCard, setMenu, setRestCard }) {
                 </div>
                 <div className="grid gap-4">
                     <h2 className="text-4xl text-center font-semibold">Наше меню</h2>
-                    {menu.map((menu) => (
-                        <div key={menu.id} className="flex items-center gap-2 shadow-xl p-4 rounded-2xl">
-                            <img className="w-1/4 h-fit rounded-3xl object-center object-cover" src={menu.image} alt=""></img>
+                    {menu.map((menuItem) => (
+                        <div key={menuItem.id} className="flex items-center gap-2 shadow-xl p-4 rounded-2xl">
+                            <img className="w-1/4 h-fit rounded-3xl object-center object-cover" src={menuItem.image} alt=""></img>
                             <div className="flex flex-col">
-                                <h3 className="text-xl font-semibold">{menu.name}</h3>
-                                <p className="">{menu.description}</p>
+                                <h3 className="text-xl font-semibold">{menuItem.name}</h3>
+                                <p className="">{menuItem.description}</p>
                             </div>
                             <div className="flex flex-col items-center gap-4">
-                                <p className="text-xl font-bold italic">{menu.price} ₽ </p>
-                                <Button handleClick={handleClick} title="Заказать" />
+                                <p className="text-xl font-bold italic">{menuItem.price} ₽ </p>
+                                <Button handleClick={(event) => handleClick(event, menuItem)} title="Заказать" />
+                                {/* <Button onClick={() => deleteProducts(menu.id)} title="Удалить" /> */}
                             </div>
                         </div>
                     ))

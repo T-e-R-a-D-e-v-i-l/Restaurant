@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import Button from 'Components/Button';
+import ButtonLink from 'Components/ButtonLink';
 
 
 function Restaurants() {
@@ -11,12 +11,16 @@ function Restaurants() {
             .then(response => setItems(response))
     }, [])
 
+    // console.log(items)
+
     const [value, setValue] = useState('')
     const [isOpen, setIsOpen] = useState(true)
 
     const filteredRest = items.filter(item => {
         return item.name.toLowerCase().includes(value.toLowerCase())
     })
+
+    // console.log(filteredRest)
 
     const itemClickHandler = (e) => {
         setValue(e.target.textContent)
@@ -26,6 +30,11 @@ function Restaurants() {
     const inputClickHandler = () => {
         setIsOpen(true)
     }
+
+    // const handleClick = event => {
+    //     event.preventDefault()
+    //     setItems('')
+    // }
 
     return (
         <div className="max-w-5xl mx-auto">
@@ -44,9 +53,7 @@ function Restaurants() {
                                 <li className="p-2 hover:bg-amber-200 transition-all cursor-pointer"
                                     onClick={itemClickHandler}>
                                     {item.name}
-
                                 </li>
-
                             ))
                             : null
                     }
@@ -60,7 +67,7 @@ function Restaurants() {
                         <p className="mt-3 text-slate-700 text-sm">Основное направление кухни: {item.cuisine}</p>
                         <p className="mt-5 text-slate-950 px-2">{item.description}</p>
                         <Link to={`/restPage/${item.slug}`} className="mt-10">
-                            <Button title="Подробнее" />
+                            <ButtonLink title="Подробнее" />
                         </Link>
                     </div>
                 ))
