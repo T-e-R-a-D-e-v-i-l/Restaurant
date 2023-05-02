@@ -1,7 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import swal from 'sweetalert'
 
-function OrderForm({ orderItems }) {
 
+function OrderForm() {
+
+    const [orderItems, setOrderItems] = useState([])
     const [customerName, setCustomerName] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
@@ -14,6 +17,42 @@ function OrderForm({ orderItems }) {
     const [emailError, setEmailError] = useState('Введите адрес электронной почты')
     const [customerNameError, setCustomerNameError] = useState('Введите Фамилию и Имя')
 
+    useEffect(() => {
+        const cartItemsLS = localStorage.getItem('orderItems')
+        if (cartItemsLS) {
+            setOrderItems(JSON.parse(cartItemsLS))
+        }
+    }, [])
+
+    const totalResult = orderItems.reduce((prev, current) => prev + parseInt(current.price), 0)
+
+    async function orderSubmit(event) {
+        event.preventDefault()
+        const params = {
+            customerName: { customerName },
+            phone: { phone },
+            email: { email },
+            restaurantId, // как передать??
+            cartItems // как передать??
+        };
+
+        const url = `https://www.bit-by-bit.ru/api/student-projects/restaurants/order`;
+
+        let response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(params),
+        });
+
+        try {
+            let date = await response.json();
+
+            if (date) {
+                swal("Спасибо!", "Ваша заявка принята!", "success");
+            }
+        } catch (error) {
+            swal("Произошла ошибка!", "Попробуйте снова", "error");
+        }
+    }
 
     const blurHandler = (e) => {
         switch (e.target.name) {
@@ -29,9 +68,9 @@ function OrderForm({ orderItems }) {
         }
     }
 
-    const phoneHandler = (e) => {
+    const phoneHandler = (e) => { // выдает ошибку
         setPhone(e.target.value)
-        const re = /\+7\(\d{3}\)\d{3}-\d{2}-\d{2}/
+        const re = /\+7\(\d{3} \)\d{3}-\d{2}-\d{2}/
         if (!re.test(String(e.target.value).toLowerCase())) {
             setPhoneError('Введите данные в заданом формате +7(999)999-99-99!')
         } else {
@@ -49,9 +88,9 @@ function OrderForm({ orderItems }) {
         }
     }
 
-    const nameHandler = (e) => {
+    const nameHandler = (e) => { // выдает ошибку
         setCustomerName(e.target.value)
-        const re = /^[А-ЯЁ][а-яё]+А-ЯЁ][а-яё]$/;
+        const re = /^[А-ЯЁ][а-яё]+ А-ЯЁ][а-яё]$/;
         if (!re.test(String(e.target.value).toLowerCase())) {
             setCustomerNameError('Некорректные данные!')
         } else {
@@ -63,10 +102,20 @@ function OrderForm({ orderItems }) {
         <div className='max-w-screen-md mx-auto my-10'>
             <h2 className="text-3xl font-semibold py-2">Ваш заказ: </h2>
             <div className="flex flex-col gap-4">
-                <p>Заказ из ресторан: { }</p>
-                <p>Вы заказали: { }</p>
-                <p>Доставка: 0 ₽</p>
-                <p className="text-xl font-bold py-2">Общая сумма заказа: 0 ₽</p>
+                <p className="text-lg font-semibold">Заказ из ресторана: {orderItems.place}</p>
+                <p className="text-lg font-semibold">Вы заказали:</p>
+                <p>
+                    {orderItems.map((menuOrder) => ( // как передать количество??
+                        <div key={menuOrder.id} className="flex items-center gap-4 ">
+                            <div className='flex justify-start items-center gap-4 w-3/5'>
+                                <h3 className="text-md ">{menuOrder.name}</h3>
+                            </div>
+                        </div>
+                    ))
+                    }
+                </p>
+                <p className="text-lg font-semibold">Доставка: 0 ₽</p>
+                <p className="text-xl font-bold py-2">Общая сумма заказа: {totalResult} ₽</p>
 
             </div>
             <h3 className="text-xl font-semibold py-6">Введите данные для оформления заказа:</h3>
