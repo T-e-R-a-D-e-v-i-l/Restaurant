@@ -1,4 +1,7 @@
 import { useEffect } from "react"
+import { Link } from "react-router-dom"
+import ButtonLink from 'Components/ButtonLink';
+
 
 
 function Cart({ deleteProducts, orderItems }) {
@@ -62,10 +65,13 @@ function Cart({ deleteProducts, orderItems }) {
 
             <div className='flex justify-end shadow-x rounded-2xl gap-4 p-6 text-lg font-semibold italic'>
                 <p>Итого:</p>
-                <p>8 блюд</p>
+                <p>8 блюд</p> {/* {menuOrder.length} блюд */}
                 <p key={result}>на сумму: {result} ₽</p>
             </div>
-            <button className='bg-amber-200 py-2 rounded-xl w-full'>Оформить заказ</button>
+            <Link to={`/orderForm`} className="mt-10">
+                <ButtonLink title="Оформить заказ" />
+            </Link>
+            {/* <button className='bg-amber-200 py-2 rounded-xl w-full'>Оформить заказ</button> */}
         </div>
     )
 }

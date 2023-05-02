@@ -20,8 +20,6 @@ function Restaurants() {
         return item.name.toLowerCase().includes(value.toLowerCase())
     })
 
-    // console.log(filteredRest)
-
     const itemClickHandler = (e) => {
         setValue(e.target.textContent)
         setIsOpen(!isOpen)
@@ -30,11 +28,6 @@ function Restaurants() {
     const inputClickHandler = () => {
         setIsOpen(true)
     }
-
-    // const handleClick = event => {
-    //     event.preventDefault()
-    //     setItems('')
-    // }
 
     return (
         <div className="max-w-5xl mx-auto">
