@@ -37,7 +37,7 @@ function Restaurants() {
                     onClick={inputClickHandler}
                     value={value}
                     placeholder="Найти ресторан"
-                    className="border border-solid border-gray-400 w-6/12 rounded p-2"
+                    className="border border-solid border-gray-400 w-8/12 md:w-7/12 lg:w-6/12 rounded p-2"
                 />
                 <ul className="absolute left-64 top-12 bg-white max-h-48 w-6/12 rounded h-auto overflow-auto">
                     {
@@ -54,11 +54,15 @@ function Restaurants() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-10">
                 {filteredRest.map((item) => (
-                    <div key={item.id} className="flex flex-col items-center shadow-2xl text-center border rounded-xl overflow-hidden">
-                        <img className="h-1/2 lg:h-1/4 w-full object-center object-cover" src={item.image} alt=""></img>
-                        <h3 className="text-2xl font-semibold">{item.name}</h3>
-                        <p className="mt-3 text-slate-700 text-sm">Основное направление кухни: {item.cuisine}</p>
-                        <p className="mt-5 text-slate-950 px-2">{item.description}</p>
+                    <div key={item.id} className="flex flex-col justify-between items-center shadow-2xl text-center border rounded-xl overflow-hidden pb-10">
+                        <div className="flex flex-col ">
+                            <img className="h-96 lg:h-64 w-full object-center object-cover"
+                                src={item.image} alt="">
+                            </img>
+                            <h3 className="text-2xl font-semibold">{item.name}</h3>
+                            <p className="mt-3 text-slate-700 text-sm">Основное направление кухни: {item.cuisine}</p>
+                            <p className="mt-5 text-slate-950 px-2">{item.description}</p>
+                        </div>
                         <Link to={`/restPage/${item.slug}`} className="mt-10">
                             <ButtonLink title="Подробнее" />
                         </Link>

@@ -32,8 +32,8 @@ function OrderForm() {
             customerName: { customerName },
             phone: { phone },
             email: { email },
-            restaurantId, // как передать??
-            cartItems // как передать??
+            // restaurantId, // как передать??
+            // cartItems // как передать??
         };
 
         const url = `https://www.bit-by-bit.ru/api/student-projects/restaurants/order`;
@@ -99,7 +99,7 @@ function OrderForm() {
     }
 
     return (
-        <div className='max-w-screen-md mx-auto my-10'>
+        <div className='max-w-screen-md mx-auto my-10 px-8'>
             <h2 className="text-3xl font-semibold py-2">Ваш заказ: </h2>
             <div className="flex flex-col gap-4">
                 <p className="text-lg font-semibold">Заказ из ресторана: {orderItems.place}</p>

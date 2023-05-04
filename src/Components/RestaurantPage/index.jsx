@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import Button from 'Components/Button'
 import { format } from "date-fns"
 import uuid4 from 'uuid4'
-// import swal from 'sweetalert'
+import swal from 'sweetalert'
 
 
 function RestaurantPage() {
@@ -35,32 +35,32 @@ function RestaurantPage() {
     if (!restCard) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
 
     // console.log(slug)
-    // const addProduct = (orderMenu) => {
-    //     if (cartItems.length > 0) {
-    //         if (cartItems[0].place !== orderMenu.place) {
-    //             swal({
-    //                 title: "Подтвердите действие!",
-    //                 text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
-    //                 icon: "warning",
-    //                 buttons: true,
-    //                 dangerMode: true,
-    //             })
-    //                 .then((willDelete) => {
-    //                     if (willDelete) {
-    //                         swal("Корзина очищена!", {
-    //                             icon: "success",
-    //                         });
-    //                     } else {
-    //                         swal("");
-    //                     }
-    //                 });
-    //         } else {
-    //             setCartItems([orderMenu]);
-    //         }
-    //     } else {
-    //         setCartItems([cartItems])
-    //     }
-    // }
+    const addProduct = (cartItems, orderMenu) => {
+        if (cartItems.length > 0) {
+            if (cartItems[0].place !== orderMenu.place) {
+                swal({
+                    title: "Подтвердите действие!",
+                    text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal("Корзина очищена!", {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("");
+                        }
+                    });
+            } else {
+                setCartItems([orderMenu]);
+            }
+        } else {
+            setCartItems([cartItems])
+        }
+    }
 
     // console.log(cartItems)
     // // console.log(restCard)

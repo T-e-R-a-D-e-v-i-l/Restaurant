@@ -35,7 +35,7 @@ function Cart() {
 
 
     return (
-        <div className='max-w-screen-md mx-auto mb-10'>
+        <div className='max-w-screen-md mx-auto mb-10 px-10'>
             <h2 className='text-4xl font-bold py-10 text-center'>Корзина</h2>
             <p className='text-2xl font-semibold italic'>Ваш заказ из ресторана: {orderItems.place}</p>
             {orderItems.length === 0 && (
@@ -72,7 +72,7 @@ function Cart() {
 
             <div className='flex justify-end shadow-x rounded-2xl gap-4 p-6 text-lg font-semibold italic'>
                 <p>Итого:</p>
-                <p>{orderItems.length} блюд</p>
+                <p>блюд {orderItems.length} </p>
                 <p>на сумму: {totalResult} ₽</p>
             </div>
             <Link to={`/orderForm`} className="mt-10">
