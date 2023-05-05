@@ -17,23 +17,27 @@ function OrderForm() {
     const [emailError, setEmailError] = useState('Введите адрес электронной почты')
     const [customerNameError, setCustomerNameError] = useState('Введите Фамилию и Имя')
 
+
     useEffect(() => {
         const cartItemsLS = localStorage.getItem('orderItems')
         if (cartItemsLS) {
             setOrderItems(JSON.parse(cartItemsLS))
         }
-    }, [])
+    }, [orderItems])  // ничего не передается, пустой массив
 
-    const totalResult = orderItems.reduce((prev, current) => prev + parseInt(current.price), 0)
 
+
+    const totalResult = orderItems.reduce((prev, current) => prev + parseFloat(current.price), 0)
+
+    console.log(orderItems)
     async function orderSubmit(event) {
         event.preventDefault()
         const params = {
             customerName: { customerName },
             phone: { phone },
             email: { email },
-            // restaurantId, // как передать??
-            // cartItems // как передать??
+            restaurantId: orderItems[0].restaurantId,
+            cartItems: orderItems
         };
 
         const url = `https://www.bit-by-bit.ru/api/student-projects/restaurants/order`;
@@ -70,7 +74,7 @@ function OrderForm() {
 
     const phoneHandler = (e) => { // выдает ошибку
         setPhone(e.target.value)
-        const re = /\+7\(\d{3} \)\d{3}-\d{2}-\d{2}/
+        const re = /\+7\d{10}/
         if (!re.test(String(e.target.value).toLowerCase())) {
             setPhoneError('Введите данные в заданом формате +7(999)999-99-99!')
         } else {
@@ -82,7 +86,7 @@ function OrderForm() {
         setEmail(e.target.value)
         const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
         if (!re.test(String(e.target.value).toLowerCase())) {
-            setEmailError('Некорректный фдресс электронной почты, проверьте данные!')
+            setEmailError('Некорректный адресс электронной почты, проверьте данные!')
         } else {
             setEmailError('')
         }
@@ -90,7 +94,7 @@ function OrderForm() {
 
     const nameHandler = (e) => { // выдает ошибку
         setCustomerName(e.target.value)
-        const re = /^[А-ЯЁ][а-яё]+ А-ЯЁ][а-яё]$/;
+        const re = /^[А-ЯЁ][а-яё]$/;
         if (!re.test(String(e.target.value).toLowerCase())) {
             setCustomerNameError('Некорректные данные!')
         } else {
@@ -99,24 +103,23 @@ function OrderForm() {
     }
 
     return (
-        <div className='max-w-screen-md mx-auto my-10 px-8'>
+        <div className='max-w-screen-md mx-auto my-10'>
             <h2 className="text-3xl font-semibold py-2">Ваш заказ: </h2>
             <div className="flex flex-col gap-4">
-                <p className="text-lg font-semibold">Заказ из ресторана: {orderItems.place}</p>
+                <span className="text-lg font-semibold">Заказ из ресторана: {orderItems[0].place}</span>
                 <p className="text-lg font-semibold">Вы заказали:</p>
-                <p>
-                    {orderItems.map((menuOrder) => ( // как передать количество??
+                <div>
+                    {orderItems.map((menuOrder) => (
                         <div key={menuOrder.id} className="flex items-center gap-4 ">
                             <div className='flex justify-start items-center gap-4 w-3/5'>
-                                <h3 className="text-md ">{menuOrder.name}</h3>
+                                <span className="text-md ">{menuOrder.name}</span>
                             </div>
                         </div>
                     ))
                     }
-                </p>
+                </div>
                 <p className="text-lg font-semibold">Доставка: 0 ₽</p>
-                <p className="text-xl font-bold py-2">Общая сумма заказа: {totalResult} ₽</p>
-
+                <span className="text-xl font-bold py-2">Общая сумма заказа: {totalResult.toFixed(2)} ₽</span>
             </div>
             <h3 className="text-xl font-semibold py-6">Введите данные для оформления заказа:</h3>
             <form className="flex flex-col gap-6">
@@ -170,7 +173,7 @@ function OrderForm() {
                     placeholder="Комментарий для курьера"
                     className="border border-solid border-gray-400 rounded p-2 h-28 "
                 />
-                <button className='bg-amber-200 py-2 font-semibold text-xl rounded-xl w-full' type="submit">Оформить заказ</button>
+                <button className='bg-amber-200 py-2 font-semibold text-xl rounded-xl w-full' type="submit" orderSubmit={orderSubmit}>Оформить заказ</button>
 
             </form>
         </div>

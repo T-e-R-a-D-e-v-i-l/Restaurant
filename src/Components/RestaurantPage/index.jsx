@@ -30,41 +30,41 @@ function RestaurantPage() {
     useEffect(() => {
         const cartJson = JSON.stringify(cartItems)
         localStorage.setItem("orderItems", cartJson)
+
+        console.log(cartJson)
     }, [cartItems])
+
+
 
     if (!restCard) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
 
     // console.log(slug)
-    const addProduct = (cartItems, orderMenu) => {
-        if (cartItems.length > 0) {
-            if (cartItems[0].place !== orderMenu.place) {
-                swal({
-                    title: "Подтвердите действие!",
-                    text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            swal("Корзина очищена!", {
-                                icon: "success",
-                            });
-                        } else {
-                            swal("");
-                        }
-                    });
-            } else {
-                setCartItems([orderMenu]);
-            }
-        } else {
-            setCartItems([cartItems])
-        }
-    }
-
-    // console.log(cartItems)
-    // // console.log(restCard)
-
+    // const addProduct = (cartItems, orderMenu) => {
+    //     if (cartItems.length > 0) {
+    //         if (cartItems[0].place !== orderMenu[0].place) {
+    //             swal({
+    //                 title: "Подтвердите действие!",
+    //                 text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
+    //                 icon: "warning",
+    //                 buttons: true,
+    //                 dangerMode: true,
+    //             })
+    //                 .then((willDelete) => {
+    //                     if (willDelete) {
+    //                         swal("Корзина очищена!", {
+    //                             icon: "success",
+    //                         });
+    //                     } else {
+    //                         swal("");
+    //                     }
+    //                 });
+    //         } else {
+    //             setCartItems([orderMenu]);
+    //         }
+    //     } else {
+    //         setCartItems()
+    //     }
+    // }
 
     const handleClick = (event, menuItem) => {
         event.preventDefault()
@@ -73,13 +73,23 @@ function RestaurantPage() {
             place: restCard.name,
             image: menuItem.image,
             name: menuItem.name,
-            price: menuItem.price
+            price: menuItem.price,
+            quantity: 1,
+            restaurantId: menuItem.restaurantId
         }
 
-        setCartItems([...cartItems, orderMenu])
-        // addProduct(cartItems)
+        if (cartItems.length !== 0 && cartItems.restaurantId !== orderMenu.restaurantId) {
+            swal("В вашей корзине есть блюда из другого ресторана, для продолжения удалите товары из корзины");
+        }
+        if (cartItems.length !== 0 && cartItems.restaurantId === orderMenu.restaurantId) {
+            setCartItems([...cartItems, orderMenu])
+        }
+
 
         console.log(orderMenu)
+
+
+        // addProduct(cartItems)
     }
 
     return (
