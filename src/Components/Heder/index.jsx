@@ -10,11 +10,10 @@ function Header() {
     useEffect(() => {
         const cartItemsLS = localStorage.getItem('orderItems')
         if (cartItemsLS) {
-            setOrderItems(JSON.parse(cartItemsLS))
+            setOrderItems(localStorage.getItem('orderItems'))
         }
-    }, []) // ничего не передается, пустой массив
+    }, []) // не работает, пустой массив
 
-    console.log(orderItems)
     return (
         <div className="flex flex-col sm:flex sm:items-center pt-8">
             <div className="flex justify-between ">

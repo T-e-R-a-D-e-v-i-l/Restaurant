@@ -8,7 +8,6 @@ function Cart() {
     const [orderItems, setOrderItems] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
-
     useEffect(() => {
         const cartItemsLS = localStorage.getItem('orderItems')
         if (cartItemsLS) {
@@ -22,18 +21,14 @@ function Cart() {
     const deleteProducts = (id) => {
         setOrderItems(orderItems.filter(item => item.id !== id))
         if (orderItems) {
-            const cartJson = JSON.stringify(orderItems)
-            localStorage.setItem("orderItems", cartJson)
+            localStorage.setItem("orderItems", JSON.stringify(orderItems))
         }
     }
     console.log(orderItems)
 
-
     if (isLoading) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
     if (!orderItems.length === 0) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Вы пока ничего не выбрали...</div>
 
-
-    // const result = orderItems.reduce((prev, current) => prev + parseInt(current.value) * parseInt(current.price), 0)
     const totalResult = orderItems.reduce((prev, current) => prev + parseFloat(current.price), 0)
 
     return (
@@ -57,10 +52,10 @@ function Cart() {
                         </div> */}
                         <input
                             value={menuOrder.quantity}
-                            onChange={(event) => {
-                                menuOrder.quantity = event.target.value
-                                setOrderItems()
-                            }}
+                            // onChange={(event) => {
+                            //     menuOrder.quantity = event.target.value
+                            //     setOrderItems()
+                            // }}
                             name="count"
                             min='1'
                             className="border border-solid text-center border-gray-400 rounded p-1 w-1/12"></input>
@@ -93,3 +88,5 @@ function Cart() {
 }
 
 export default Cart
+
+

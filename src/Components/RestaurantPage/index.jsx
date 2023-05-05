@@ -28,43 +28,19 @@ function RestaurantPage() {
     }, [slug, setMenu])
 
     useEffect(() => {
-        const cartJson = JSON.stringify(cartItems)
-        localStorage.setItem("orderItems", cartJson)
 
-        console.log(cartJson)
+        localStorage.setItem("orderItems", JSON.stringify(cartItems))
+
     }, [cartItems])
 
-
+    const changeBtn = (id) => {  // попытка изменять кнопки - не работает
+        cartItems.findIndex((item => item.id !== id)) > -1
+            ? <Button title="Заказать" />
+            : <Button title="Удалить" />
+    }
 
     if (!restCard) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
 
-    // console.log(slug)
-    // const addProduct = (cartItems, orderMenu) => {
-    //     if (cartItems.length > 0) {
-    //         if (cartItems[0].place !== orderMenu[0].place) {
-    //             swal({
-    //                 title: "Подтвердите действие!",
-    //                 text: "В вашей корзине есть блюда из другого ресторана, очистить корзину?",
-    //                 icon: "warning",
-    //                 buttons: true,
-    //                 dangerMode: true,
-    //             })
-    //                 .then((willDelete) => {
-    //                     if (willDelete) {
-    //                         swal("Корзина очищена!", {
-    //                             icon: "success",
-    //                         });
-    //                     } else {
-    //                         swal("");
-    //                     }
-    //                 });
-    //         } else {
-    //             setCartItems([orderMenu]);
-    //         }
-    //     } else {
-    //         setCartItems()
-    //     }
-    // }
 
     const handleClick = (event, menuItem) => {
         event.preventDefault()
@@ -78,6 +54,9 @@ function RestaurantPage() {
             restaurantId: menuItem.restaurantId
         }
 
+        changeBtn()
+
+        // попытка не добавлять блюда из одного
         if (cartItems.length !== 0 && cartItems.restaurantId !== orderMenu.restaurantId) {
             swal("В вашей корзине есть блюда из другого ресторана, для продолжения удалите товары из корзины");
         }
@@ -85,11 +64,8 @@ function RestaurantPage() {
             setCartItems([...cartItems, orderMenu])
         }
 
-
         console.log(orderMenu)
 
-
-        // addProduct(cartItems)
     }
 
     return (
