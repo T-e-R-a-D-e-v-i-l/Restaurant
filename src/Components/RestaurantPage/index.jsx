@@ -64,6 +64,7 @@ function RestaurantPage() {
             setCartItems([...cartItems.filter(c => c.itemId !== menuItem.id),
             { ...cartItem, quantity: parseInt(cartItem.quantity) - 1 }])
         }
+
     }
 
     return (
