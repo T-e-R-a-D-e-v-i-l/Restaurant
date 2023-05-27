@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ButtonLink from 'Components/ButtonLink';
+import Header from 'Components/Heder';
 
 
 function Restaurants() {
+    const [cartItems] = useState(localStorage.getItem("orderItems") ? JSON.parse(localStorage.getItem("orderItems")) : []) // товары в корзине 
+
     const [items, setItems] = useState([])
     useEffect(() => {
         fetch(`https://www.bit-by-bit.ru/api/student-projects/restaurants`)
             .then(data => data.json())
             .then(response => setItems(response))
     }, [])
-
-    // console.log(items)
 
     const [value, setValue] = useState('')
     const [isOpen, setIsOpen] = useState(true)
@@ -31,6 +32,8 @@ function Restaurants() {
 
     return (
         <div className="max-w-5xl mx-auto">
+            <Header quantity={cartItems.length} />
+
             <div className="flex mt-10 mb-5 justify-center relative">
                 <input name="restaurant"
                     onChange={(event) => setValue(event.target.value)}

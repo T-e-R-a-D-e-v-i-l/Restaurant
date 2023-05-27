@@ -10,7 +10,6 @@ function App() {
 
     return (
         <BrowserRouter>
-            <Header />
             <Routes>
                 <Route path="/" element={<Restaurants />} />
                 <Route path="/restPage/:slug" element={<RestaurantPage />} />

@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom"
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"
 import ItemsInCart from 'Components/ItemsInCart';
 
 
-function Header() {
+function Header({ quantity }) {
 
-    const [orderItems, setOrderItems] = useState([])
+    // const [orderItems, setOrderItems] = useState([])
 
-    useEffect(() => {
-        const cartItemsLS = localStorage.getItem('orderItems')
-        if (cartItemsLS) {
-            setOrderItems(localStorage.getItem('orderItems'))
-        }
-    }, []) // не работает, пустой массив
+    // useEffect(() => {
+    //     const cartItemsLS = localStorage.getItem('orderItems')
+    //     if (cartItemsLS) {
+    //         setOrderItems(localStorage.getItem('orderItems'))
+    //     }
+    // }, []) // не работает, пустой массив
 
     return (
         <div className="flex flex-col sm:flex sm:items-center pt-8">
@@ -23,7 +23,7 @@ function Header() {
                     <h3 className="hidden sm:inline md:inline lg:inline text-center ml-10 text-2xl text-slate-800 italic font-semibold">Все лучшие заведения нашего города в одном месте!</h3>
                 </Link>
                 <Link to={`/cart`} className="w-24 h-24 m-2 relative">
-                    <ItemsInCart quantity={orderItems.length} />
+                    <ItemsInCart quantity={quantity} />
                     <img src="./images/basket.png" alt="" />
                 </Link>
             </div>
