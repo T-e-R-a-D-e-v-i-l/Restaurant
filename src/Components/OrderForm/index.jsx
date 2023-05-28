@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react"
 import swal from 'sweetalert'
-import Header from 'Components/Heder';
-
-
 
 function OrderForm() {
-    const [cartItems] = useState(localStorage.getItem("orderItems") ? JSON.parse(localStorage.getItem("orderItems")) : []) // товары в корзине 
     const [orderItems, setOrderItems] = useState([])
     const [customerName, setCustomerName] = useState('')
     const [phone, setPhone] = useState('')
@@ -18,18 +14,15 @@ function OrderForm() {
     const [phoneError, setPhoneError] = useState('Введите номер телефона')
     const [emailError, setEmailError] = useState('Введите адрес электронной почты')
     const [customerNameError, setCustomerNameError] = useState('Введите Фамилию и Имя')
-    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const cartItemsLS = localStorage.getItem('orderItems')
         if (cartItemsLS) {
             setOrderItems(JSON.parse(cartItemsLS))
         }
-        setIsLoading(false)
     }, [])  // ничего не передается, пустой массив [orderItems]???
 
 
-    const totalResult = orderItems.reduce((prev, current) => prev + parseFloat(current.price), 0)
 
     async function orderSubmit(event) {
         event.preventDefault()
@@ -104,85 +97,63 @@ function OrderForm() {
         }
     }
 
-    if (isLoading) return <div className="flex justify-center text-xl text-slate-600 font-semibold pt-36">Loading...</div>
-
     return (
-        <div className="max-w-5xl mx-auto">
-            <Header quantity={cartItems.length} />
-            <div className='max-w-screen-md mx-auto my-10'>
-                <h2 className="text-3xl font-semibold py-2">Ваш заказ: </h2>
-                <div className="flex flex-col gap-4">
-                    <span className="text-lg font-semibold">Заказ из ресторана: {orderItems[0].place}</span>
-                    <p className="text-lg font-semibold">Вы заказали:</p>
-                    <div>
-                        {orderItems.map((menuOrder) => (
-                            <div key={menuOrder.id} className="flex items-center gap-4 ">
-                                <div className='flex justify-start items-center gap-4 w-3/5'>
-                                    <span className="text-md ">{menuOrder.name}</span>
-                                </div>
-                            </div>
-                        ))
-                        }
-                    </div>
-                    <p className="text-lg font-semibold">Доставка: 0 ₽</p>
-                    <span className="text-xl font-bold py-2">Общая сумма заказа: {totalResult.toFixed(2)} ₽</span>
-                </div>
-                <h3 className="text-xl font-semibold py-6">Введите данные для оформления заказа:</h3>
-                <form className="flex flex-col gap-6">
-                    {(customerNameDirty && customerNameError) && <div className="text-red-700">{customerNameError}</div>}
-                    <input
-                        name="customerName"
-                        value={customerName}
-                        onChange={(e) => {
-                            setCustomerName(e.target.value)
-                            nameHandler(e)
-                        }}
-                        onBlur={e => blurHandler(e)}
-                        placeholder="Фамилия, имя"
-                        className="border border-solid border-gray-400 rounded p-2"
-                    />
-                    {(phoneDirty && phoneError) && <div className="text-red-700">{phoneError}</div>}
-                    <input
-                        name="phone"
-                        value={phone}
-                        onChange={(e) => {
-                            setPhone(e.target.value)
-                            phoneHandler(e)
-                        }}
-                        onBlur={e => blurHandler(e)}
-                        placeholder="+7(999)999-99-99"
-                        className="border border-solid border-gray-400 rounded p-2"
-                    />
-                    {(emailDirty && emailDirty) && <div className="text-red-600">{emailError}</div>}
-                    <input
-                        name="email"
-                        value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value)
-                            emailHandler(e)
-                        }}
-                        onBlur={e => blurHandler(e)}
-                        placeholder="Адрес электронной почты"
-                        className="border border-solid border-gray-400 rounded p-2"
-                    />
-                    <input
-                        name="address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        placeholder="Адрес доставки"
-                        className="border border-solid border-gray-400 rounded p-2"
-                    />
-                    <input
-                        name="comment"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Комментарий для курьера"
-                        className="border border-solid border-gray-400 rounded p-2 h-28 "
-                    />
-                    <button className='bg-amber-200 py-2 font-semibold text-xl rounded-xl w-full' type="submit" onClick={orderSubmit}>Оформить заказ</button>
+        <div className='max-w-screen-md mx-auto '>
+            <h3 className="text-xl font-semibold py-6">Введите данные для оформления заказа:</h3>
+            <form className="flex flex-col gap-6">
+                {(customerNameDirty && customerNameError) && <div className="text-red-700">{customerNameError}</div>}
+                <input
+                    name="customerName"
+                    value={customerName}
+                    onChange={(e) => {
+                        setCustomerName(e.target.value)
+                        nameHandler(e)
+                    }}
+                    onBlur={e => blurHandler(e)}
+                    placeholder="Фамилия, имя"
+                    className="border border-solid border-gray-400 rounded p-2"
+                />
+                {(phoneDirty && phoneError) && <div className="text-red-700">{phoneError}</div>}
+                <input
+                    name="phone"
+                    value={phone}
+                    onChange={(e) => {
+                        setPhone(e.target.value)
+                        phoneHandler(e)
+                    }}
+                    onBlur={e => blurHandler(e)}
+                    placeholder="+7(999)999-99-99"
+                    className="border border-solid border-gray-400 rounded p-2"
+                />
+                {(emailDirty && emailDirty) && <div className="text-red-600">{emailError}</div>}
+                <input
+                    name="email"
+                    value={email}
+                    onChange={(e) => {
+                        setEmail(e.target.value)
+                        emailHandler(e)
+                    }}
+                    onBlur={e => blurHandler(e)}
+                    placeholder="Адрес электронной почты"
+                    className="border border-solid border-gray-400 rounded p-2"
+                />
+                <input
+                    name="address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Адрес доставки"
+                    className="border border-solid border-gray-400 rounded p-2"
+                />
+                <input
+                    name="comment"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Комментарий для курьера"
+                    className="border border-solid border-gray-400 rounded p-2 h-28 "
+                />
+                <button className='bg-amber-200 py-2 font-semibold text-xl rounded-xl w-full' type="submit" onClick={orderSubmit}>Оформить заказ</button>
 
-                </form>
-            </div>
+            </form>
         </div>
     )
 }

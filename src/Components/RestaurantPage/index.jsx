@@ -43,9 +43,14 @@ function RestaurantPage() {
 
         setCartItems([...cartItems, orderMenu])
 
+        const deleteProducts = (id) => {
+            setCartItems(cartItems.filter(item => item.id !== id))
+        }
+
         // попытка не добавлять блюда из одного ресторана
         if (cartItems.length !== 0 && cartItems[0].restaurantId !== orderMenu.restaurantId) {
             swal("В вашей корзине есть блюда из другого ресторана, для продолжения удалите товары из корзины");
+            deleteProducts() // сначала очищает корзину потом добавляет новое блюдо
         }
         if (cartItems.length !== 0 && cartItems[0].restaurantId === orderMenu.restaurantId) {
             setCartItems([...cartItems, orderMenu])
@@ -60,11 +65,13 @@ function RestaurantPage() {
 
     const minusItem = menuItem => {
         const cartItem = cartItems.find(c => c.itemId === menuItem.id)
-        if (cartItem.quantity > 1) {
+        if (cartItem.quantity >= 1) {
             setCartItems([...cartItems.filter(c => c.itemId !== menuItem.id),
             { ...cartItem, quantity: parseInt(cartItem.quantity) - 1 }])
         }
-
+        if (cartItem.quantity = 0) {
+            deleteProducts()
+        }
     }
 
     return (
