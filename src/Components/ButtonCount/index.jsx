@@ -2,7 +2,7 @@ function ButtonCount(props) {
     const { title, changeCount } = props
 
     return (
-        <button onClick={changeCount} className="">
+        <button onClick={changeCount} >
             {title}
         </button>
     )

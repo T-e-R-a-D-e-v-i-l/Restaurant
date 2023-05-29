@@ -5,7 +5,7 @@ import { format } from "date-fns"
 import swal from 'sweetalert'
 import Header from 'Components/Heder';
 
-function RestaurantPage() {
+function RestaurantPage({ quantity }) {
     const { slug } = useParams()
     const [restCard, setRestCard] = useState(null) // карточка ресторана  
     const [menu, setMenu] = useState([]) // все блюда меню 
@@ -43,12 +43,10 @@ function RestaurantPage() {
 
         setCartItems([...cartItems, orderMenu])
 
-
-
         // попытка не добавлять блюда из одного ресторана
         if (cartItems.length !== 0 && cartItems[0].restaurantId !== orderMenu.restaurantId) {
             swal("В вашей корзине есть блюда из другого ресторана, для продолжения удалите товары из корзины");
-            // deleteProducts() // сначала очищает корзину потом добавляет новое блюдо
+            deleteProducts(cartItems.itemId)
         }
         if (cartItems.length !== 0 && cartItems[0].restaurantId === orderMenu.restaurantId) {
             setCartItems([...cartItems, orderMenu])
@@ -56,7 +54,7 @@ function RestaurantPage() {
     }
 
     const deleteProducts = (id) => {
-        setCartItems(cartItems.filter(item => item.id !== id))
+        setCartItems(cartItems.filter(item => item.itemId !== id))
     }
 
     const plusItem = menuItem => {
@@ -72,7 +70,7 @@ function RestaurantPage() {
             { ...cartItem, quantity: parseInt(cartItem.quantity) - 1 }])
         }
         if (cartItem.quantity <= 1) {
-            deleteProducts()
+            deleteProducts(cartItems.itemId) // не удаляет
         }
     }
 
@@ -119,7 +117,6 @@ function RestaurantPage() {
                         ))
                         }
                     </div>
-
                 </div>
             </div>
         </div>

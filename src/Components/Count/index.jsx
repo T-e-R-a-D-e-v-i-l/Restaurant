@@ -3,21 +3,21 @@ import ButtonCount from 'Components/ButtonCount'
 
 
 function Count() {
-    const [count, setCount] = useState(1)
+    const [count, setCount] = useState()
 
     const plus = () => {
         setCount(count + 1)
     }
 
     const minus = () => {
-        if (count > 1) {
+        if (count >= 1) {
             setCount(count - 1)
         }
     }
     return (
         <div>
             <div className="flex justify-center items-center gap-2">
-                <p className='text-lg italic'>{count}</p>
+                {/* <p className='text-lg italic'>{count}</p> */}
                 <div className='flex flex-col'>
                     <ButtonCount
                         changeCount={minus}
